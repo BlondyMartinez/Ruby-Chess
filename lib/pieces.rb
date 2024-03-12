@@ -28,7 +28,7 @@ class King < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♔' : '♚'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        @piece = super(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 
 end
@@ -37,44 +37,36 @@ class Queen < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♕' : '♛'
         move_offsets =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        @piece = Piece.new(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 end
 
-class Rook
-    attr_reader :piece
-
+class Rook < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♖' : '♜'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-        @piece = Piece.new(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 end
 
 
-class Knight
-    attr_reader :piece
-
+class Knight < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♘' : '♞'
         move_offsets = [[1, 2], [-1, -2], [-1, 2], [1, -2], [2, 1], [-2, -1], [-2, 1], [2, -1]]
-        @piece = Piece.new(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 end
 
-class Bishop
-    attr_reader :piece
-
+class Bishop < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♗' : '♝'
         move_offsets = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
-        @piece = Piece.new(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 end
 
-class Pawn
-    attr_reader :piece
-
+class Pawn < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♙' : '♟︎'
 
@@ -82,6 +74,6 @@ class Pawn
         black_moves = [[-2, 0], [-1, 0], [-1, 1], [-1, -1]]
         move_offsets = color == 'white' ? white_moves : black_moves
 
-        @piece = Piece.new(symbol, move_offsets)
+        super(symbol, move_offsets)
     end
 end
