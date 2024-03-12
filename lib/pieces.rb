@@ -21,11 +21,9 @@ end
 class Queen
     attr_reader :piece
 
-    possible_moves = []
-
     def initialize(color = 'white')
         symbol = color == 'white' ? '♕' : '♛'
-        possible_moves = []
+        possible_moves =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
         @piece = Piece.new(symbol, possible_moves)
     end
 end
@@ -35,7 +33,7 @@ class Rook
 
     def initialize(color = 'white')
         symbol = color == 'white' ? '♖' : '♜'
-        possible_moves = []
+        possible_moves = [[0, 1], [0, -1], [1, 0], [-1, 0]]
         @piece = Piece.new(symbol, possible_moves)
     end
 end
@@ -54,10 +52,9 @@ end
 class Bishop
     attr_reader :piece
 
-    possible_moves = []
-
     def initialize(color = 'white')
         symbol = color == 'white' ? '♗' : '♝'
+        possible_moves = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
         @piece = Piece.new(symbol, possible_moves)
     end
 end
