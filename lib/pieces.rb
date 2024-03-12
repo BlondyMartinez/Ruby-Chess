@@ -36,16 +36,16 @@ end
 class Queen < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♕' : '♛'
-        move_offsets =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        super(symbol, move_offsets)
+        relative_move_offsets =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        super(symbol,  generate_move_offsets(relative_move_offsets))
     end
 end
 
 class Rook < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♖' : '♜'
-        move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-        super(symbol, move_offsets)
+        relative_move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+        super(symbol,  generate_move_offsets(relative_move_offsets))
     end
 end
 
@@ -61,8 +61,8 @@ end
 class Bishop < Piece
     def initialize(color = 'white')
         symbol = color == 'white' ? '♗' : '♝'
-        move_offsets = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
-        super(symbol, move_offsets)
+        relative_move_offsets = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
+        super(symbol, generate_move_offsets(relative_move_offsets))
     end
 end
 
@@ -77,3 +77,18 @@ class Pawn < Piece
         super(symbol, move_offsets)
     end
 end
+
+
+# utility
+
+def generate_move_offsets(relative_offsets)
+    offsets = []
+  
+    relative_offsets.each do |dx, dy|
+      (1..7).each do |n|
+        offsets << [dx * n, dy * n]
+      end
+    end
+  
+    offsets
+  end
