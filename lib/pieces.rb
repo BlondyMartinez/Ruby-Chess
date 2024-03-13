@@ -2,9 +2,10 @@ class Piece
     attr_reader :symbol, :move_offsets
     attr_accessor :position
 
-    def initialize(symbol, move_offsets)
+    def initialize(symbol, move_offsets, initial_position)
         @symbol = symbol
         @move_offsets = move_offsets
+        @position = initial_position
     end
 
     def valid_move?(coordinates)
@@ -25,56 +26,63 @@ class Piece
 end
 
 class King < Piece
-    def initialize(color = 'white')
+    def initialize(color)
         symbol = color == 'white' ? '♔' : '♚'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        super(symbol, move_offsets)
+        position = color == 'white' ? [0, 4] : [7, 3];
+        super(symbol, move_offsets, position)
     end
 
 end
 
 class Queen < Piece
-    def initialize(color = 'white')
+    def initialize(color)
         symbol = color == 'white' ? '♕' : '♛'
         relative_move_offsets =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        super(symbol,  generate_move_offsets(relative_move_offsets))
+        position = color == 'white' ? [0, 3] : [7, 4];
+        super(symbol,  generate_move_offsets(relative_move_offsets), position)
     end
 end
 
 class Rook < Piece
-    def initialize(color = 'white')
+    def initialize(color, side)
         symbol = color == 'white' ? '♖' : '♜'
         relative_move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-        super(symbol,  generate_move_offsets(relative_move_offsets))
+        position = color == 'white' ? (side == 'left' ? [0, 0] : [0, 7]) : (side == 'left' ? [7, 0] : [7, 7])
+        super(symbol,  generate_move_offsets(relative_move_offsets), position)
     end
 end
 
 
 class Knight < Piece
-    def initialize(color = 'white')
+    def initialize(color, side)
         symbol = color == 'white' ? '♘' : '♞'
         move_offsets = [[1, 2], [-1, -2], [-1, 2], [1, -2], [2, 1], [-2, -1], [-2, 1], [2, -1]]
-        super(symbol, move_offsets)
+        position = color == 'white' ? (side == 'left' ? [0, 1] : [0, 6]) : (side == 'left' ? [7, 1] : [7, 6])
+        super(symbol, move_offsets, position)
     end
 end
 
 class Bishop < Piece
-    def initialize(color = 'white')
+    def initialize(color, side)
         symbol = color == 'white' ? '♗' : '♝'
         relative_move_offsets = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
-        super(symbol, generate_move_offsets(relative_move_offsets))
+        position = color == 'white' ? (side == 'left' ? [0, 2] : [0, 5]) : (side == 'left' ? [7, 2] : [7, 5])
+        super(symbol, generate_move_offsets(relative_move_offsets), position)
     end
 end
 
 class Pawn < Piece
-    def initialize(color = 'white')
+    def initialize(color, index)
         symbol = color == 'white' ? '♙' : '♟︎'
 
         white_moves = [[2, 0], [1, 0], [1, 1], [1, -1]]
         black_moves = [[-2, 0], [-1, 0], [-1, 1], [-1, -1]]
         move_offsets = color == 'white' ? white_moves : black_moves
 
-        super(symbol, move_offsets)
+        position = color == 'white' ? [1, index] : [7, index];
+
+        super(symbol, move_offsets, position)
     end
 end
 
