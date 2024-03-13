@@ -85,10 +85,10 @@ def generate_move_offsets(relative_offsets)
     offsets = []
   
     relative_offsets.each do |dx, dy|
-      (1..7).each do |n|
-        offsets << [dx * n, dy * n]
-      end
+        (1..7).each do |n|
+            offsets << [dx * n, dy * n]
+        end
     end
   
     offsets
-  end
+end
