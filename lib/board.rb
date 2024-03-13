@@ -44,4 +44,8 @@ class Board
         x, y = new_position
         @board[x][y] = piece.symbol
     end
+
+    def slot_empty?(slot)
+        @board[slot[0], slot[1]] == ' '
+    end
 end
