@@ -80,7 +80,7 @@ class Pawn < Piece
         black_moves = [[-2, 0], [-1, 0], [-1, 1], [-1, -1]]
         move_offsets = color == 'white' ? white_moves : black_moves
 
-        position = color == 'white' ? [1, index] : [7, index];
+        position = color == 'white' ? [1, index] : [6, index];
 
         super(symbol, move_offsets, position)
     end
