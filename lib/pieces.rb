@@ -1,3 +1,5 @@
+require_relative 'board'
+
 class Piece
     attr_reader :symbol, :move_offsets
     attr_accessor :position
@@ -6,6 +8,11 @@ class Piece
         @symbol = symbol
         @move_offsets = move_offsets
         @position = initial_position
+    end
+
+    def alive?(board)
+        x,y = @position
+        board.board[x][y] != @symbol
     end
 
     def valid_move?(coordinates)
