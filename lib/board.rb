@@ -46,6 +46,7 @@ class Board
     end
 
     def slot_empty?(slot)
-        @board[slot[0], slot[1]] == ' '
+        x, y = slot
+        @board[x][y] == ' '
     end
 end
