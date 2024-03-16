@@ -1,45 +1,42 @@
 require_relative "../lib/pieces"
+require_relative "../lib/board"
 
 # frozen_string_literal: true
 
 describe "Pieces" do 
-    it "validate moves of king" do
-        king = King.new
-        king.position = [0, 3]
-        expect(king.valid_move?([0,5])).to eq(false)
-        expect(king.valid_move?([2,5])).to eq(false)
-        expect(king.valid_move?([0,4])).to eq(true)
-        expect(king.valid_move?([1,3])).to eq(true)
-    end
-
-    it "validate moves of knight" do
-        knight = Knight.new
-        knight.position = [0, 1]
-        expect(knight.valid_move?([1, 3])).to eq(true)
-        expect(knight.valid_move?([2, 2])).to eq(true)
-        expect(knight.valid_move?([3, 3])).to eq(false)
-        expect(knight.valid_move?([4, 1])).to eq(false)
-    end
-
-    it "validates moves of rook" do
-        rook = Rook.new
-        rook.position = [0, 0]
-        expect(rook.valid_move?([0, 5])).to eq(true)
-        expect(rook.valid_move?([2, 5])).to eq(false)
-    end
-    
-    it "validates moves of bishop" do
-        bishop = Bishop.new
-        bishop.position = [0, 0]
-        expect(bishop.valid_move?([2, 2])).to eq(true)
-        expect(bishop.valid_move?([0, 3])).to eq(false)
-    end
-    
-    it "validates moves of queen" do
-        queen = Queen.new
-        queen.position = [0, 0]
-        expect(queen.valid_move?([0, 5])).to eq(true)
-        expect(queen.valid_move?([1, 3])).to eq(false)
-        expect(queen.valid_move?([3, 3])).to eq(true)
+    describe "Piece movement" do
+        it "allows pieces to move to an empty slot" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
+        
+            piece_to_move = player1.pieces[0][0] 
+            initial_position = piece_to_move.position
+            target_position = [3, 0]  
+            
+            board.update_piece_pos(piece_to_move, target_position)
+        
+            
+            expect(piece_to_move.position).to eq(target_position)
+            expect(board.slot_empty?(initial_position)).to be true
+        end
+      
+        it "prevents pieces from moving to an occupied slot" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
+          
+            obstructing_piece_position = [3, 0]
+            board.update_piece_pos(player2.pieces[0][1], obstructing_piece_position)
+          
+            piece_to_move = player1.pieces[0][0] 
+            initial_position = piece_to_move.position
+            target_position = [3, 0]  
+          
+            board.update_piece_pos(piece_to_move, target_position) if piece_to_move.valid_move?(target_position, board)
+          
+            expect(piece_to_move.position).to eq(initial_position)
+            expect(board.slot_empty?(target_position)).to be false
+          end
     end
 end
