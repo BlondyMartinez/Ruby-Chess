@@ -42,6 +42,7 @@ class Board
         return if new_position == nil
 
         x, y = new_position
+        piece.position = new_position
         @board[x][y] = piece.symbol
     end
 
