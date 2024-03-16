@@ -15,19 +15,44 @@ class Piece
         board.board[x][y] != @symbol
     end
 
-    def valid_move?(coordinates)
-        generate_possible_moves(@position).include?(coordinates)
+    def valid_move?(target_position, board)
+        return false unless generate_possible_moves(board).include?(target_position)
+    
+        path = get_path_to(target_position)
+        
+        path.each do |pos|
+            x, y = pos
+            return false unless board.slot_empty?([x, y])
+        end
+    
+        true
+    end
+    
+    def get_path_to(target_position)
+        x1, y1 = @position
+        x2, y2 = target_position
+        dx = (x2 - x1).positive? ? 1 : (x2 - x1).negative? ? -1 : 0
+        dy = (y2 - y1).positive? ? 1 : (y2 - y1).negative? ? -1 : 0
+    
+        path = []
+        x, y = x1 + dx, y1 + dy
+        while [x, y] != target_position
+            path << [x, y]
+            x += dx
+            y += dy
+        end
+        path
     end
 
-    def generate_possible_moves(position) 
+    def generate_possible_moves(board)
         possible_moves = []
-
+    
         @move_offsets.each do |offset|
-            x = position[0] + offset[0]
-            y = position[1] + offset[1]
-            possible_moves.push([x, y]) if x.between?(0, 7) && y.between?(0, 7) 
+            x = @position[0] + offset[0]
+            y = @position[1] + offset[1]
+            possible_moves << [x, y] if x.between?(0, 7) && y.between?(0, 7) && board.slot_empty?([x, y])
         end
-
+    
         possible_moves
     end
 end
