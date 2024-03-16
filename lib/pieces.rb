@@ -80,6 +80,7 @@ class Bishop < Piece
 end
 
 class Pawn < Piece
+    attr_accessor :is_first_move
     def initialize(color, index)
         symbol = color == 'white' ? '♙' : '♟︎'
 
@@ -89,7 +90,14 @@ class Pawn < Piece
 
         position = color == 'white' ? [1, index] : [6, index];
 
+        @is_first_move = true
+
         super(symbol, move_offsets, position)
+    end
+
+    def first_move
+        @is_first_move = false
+        move_offsets.delete_if { |offset| offset == [2, 0] || offset == [-2, 0] }
     end
 end
 
