@@ -17,7 +17,7 @@ class Board
         puts "   _________________________________"
 
         @board.reverse.each_with_index do |row, index|
-            puts "#{@letters[letter_index]}  | " + row.join(' | ') + " |  #{@letters[letter_index]}"
+            puts "#{@letters[letter_index]}  | " + row_pieces_to_symbols(row).join(' | ') + " |  #{@letters[letter_index]}"
             puts '   |---|---|---|---|---|---|---|---|' if index != @board.length - 1
             letter_index -= 1
         end
@@ -27,10 +27,10 @@ class Board
     end
 
     def add_pieces(pieces)
-        pieces.each_with_index do |row, r_index|
-            row.each_with_index do |piece, c_index|
+        pieces.each do |row|
+            row.each do |piece|
                 x, y = piece.position
-                @board[x][y] = piece.symbol
+                @board[x][y] = piece
             end
         end
     end
@@ -39,15 +39,19 @@ class Board
         x, y = piece.position
         @board[x][y] = ' '
 
-        return if new_position == nil
+        return if new_position.nil?
 
         x, y = new_position
         piece.position = new_position
-        @board[x][y] = piece.symbol
+        @board[x][y] = piece
     end
 
     def slot_empty?(slot)
         x, y = slot
         @board[x][y] == ' '
+    end
+
+    def row_pieces_to_symbols(row)
+        row.map { |piece| piece == ' ' ? ' ' : piece.symbol }
     end
 end
