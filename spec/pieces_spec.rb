@@ -163,4 +163,26 @@ describe "Pieces" do
             expect(bishop.position).to eq(target_position)
         end
     end
+
+    it "allows pieces to move to a slot occupied by an enemy piece" do
+        player1 = Player.new('black')
+        player2 = Player.new('white')
+        board = Board.new(player1.pieces.concat(player2.pieces))
+      
+        obstructing_piece_position = [4, 3]
+        board.update_piece_pos(player2.pieces[0][1], obstructing_piece_position)
+      
+        piece_to_move = player1.pieces[0][0] 
+        board.update_piece_pos(piece_to_move, [3,3])
+        initial_position = piece_to_move.position
+        target_position = [4, 3]  
+      
+        expect(piece_to_move.valid_move?(target_position, board)).to be true
+        if piece_to_move.valid_move?(target_position, board)
+            board.update_piece_pos(piece_to_move, target_position) 
+        end
+
+        expect(piece_to_move.position).to eq(target_position)
+        expect(board.slot_empty?(initial_position)).to be true
+    end
 end
