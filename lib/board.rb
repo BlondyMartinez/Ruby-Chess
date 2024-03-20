@@ -54,4 +54,10 @@ class Board
     def row_pieces_to_symbols(row)
         row.map { |piece| piece == ' ' ? ' ' : piece.symbol }
     end
+
+    def piece_at(pos)
+        x, y = pos
+        return @board[x][y] if @board[x][y].is_a?(Piece)
+        nil
+    end
 end
