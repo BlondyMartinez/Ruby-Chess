@@ -130,21 +130,21 @@ describe "Pieces" do
             expect(rook.position).to eq(target_position)
         end
 
-        # it "allows knight to move in an L-shape" do
-        #     player1 = Player.new('black')
-        #     player2 = Player.new('white')
-        #     board = Board.new(player1.pieces.concat(player2.pieces))
+        it "allows knight to move in an L-shape" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
         
-        #     knight = player1.pieces.flatten.find { |piece| piece.is_a?(Knight) }
-        #     initial_position = knight.position
-        #     target_position = [initial_position[0] - 2, initial_position[1] - 1]
+            knight = player1.pieces.flatten.find { |piece| piece.is_a?(Knight) }
+            initial_position = knight.position
+            target_position = [initial_position[0] - 2, initial_position[1] - 1]
 
-        #     if knight.valid_move?(target_position, board)
-        #         board.update_piece_pos(knight, target_position)
-        #     end
+            if knight.valid_move?(target_position, board)
+                board.update_piece_pos(knight, target_position)
+            end
 
-        #     expect(knight.position).to eq(target_position)
-        # end
+            expect(knight.position).to eq(target_position)
+        end
 
         it "allows bishop to move diagonally" do
             player1 = Player.new('black')

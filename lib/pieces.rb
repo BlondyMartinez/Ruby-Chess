@@ -2,27 +2,25 @@ require_relative 'board'
 
 class Piece
     attr_reader :symbol, :move_offsets
-    attr_accessor :position
+    attr_accessor :position, :alive
 
     def initialize(symbol, move_offsets, initial_position)
         @symbol = symbol
         @move_offsets = move_offsets
         @position = initial_position
-    end
-
-    def alive?(board)
-        x,y = @position
-        board.board[x][y] != @symbol
+        @alive = true
     end
 
     def valid_move?(target_position, board)
         return false unless generate_possible_moves(board).include?(target_position)
-    
-        path = get_path_to(target_position)
         
-        path.each do |pos|
-            x, y = pos
-            return false unless board.slot_empty?([x, y])
+        if !self.is_a?(Knight)
+            path = get_path_to(target_position)
+            
+            path.each do |pos|
+                x, y = pos
+                return false unless board.slot_empty?([x, y])
+            end
         end
     
         true
