@@ -60,4 +60,17 @@ class Board
         return @board[x][y] if @board[x][y].is_a?(Piece)
         nil
     end
+
+    def castle(rook, king, type) 
+        return nil if rook.has_moved || !king.can_castle? 
+
+        path_clear = rook.get_path_to(king).all? { |slot| slot_empty?(slot) }
+        return nil if !path_clear
+
+        k_offset = type == 'short' ? 2 : -2
+        update_piece_pos(king, [king.position[0], king.position[1] + k_offset])
+        
+        r_offset = type == 'short' ? -2 : +3
+        update_piece_pos(rook, [rook.position[0], rook.position[1] + r_offset])
+    end
 end
