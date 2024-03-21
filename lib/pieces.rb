@@ -9,6 +9,7 @@ class Piece
         @move_offsets = move_offsets
         @initial_position = initial_position
         @position = @initial_position
+        @has_moved = false
         @alive = true
         @color = color
     end
@@ -80,7 +81,7 @@ class King < Piece
     end
 
     def can_castle?
-        !has_moved && !in_check;
+        !self.has_moved && !in_check;
     end
 end
 
@@ -131,12 +132,11 @@ class Pawn < Piece
 
         position = color == 'white' ? [1, index] : [6, index];
 
-        @is_first_move = true
-
         super(symbol, move_offsets, position, color)
     end
 
     def first_move
+        self.has_moved = true
         move_offsets.delete_if { |offset| offset == [2, 0] || offset == [-2, 0] }
     end
 end

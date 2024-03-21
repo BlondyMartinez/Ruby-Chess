@@ -75,7 +75,7 @@ describe "Pieces" do
                 board.update_piece_pos(pawn, target_position)
             end
 
-            expect(pawn.is_first_move).to be false
+            expect(pawn.has_moved).to be true
             expect(pawn.position).to eq(initial_position)
         end
 
