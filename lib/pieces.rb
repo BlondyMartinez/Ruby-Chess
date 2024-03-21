@@ -2,7 +2,7 @@ require_relative 'board'
 
 class Piece
     attr_reader :symbol, :move_offsets, :color, :initial_position
-    attr_accessor :position, :alive
+    attr_accessor :position, :alive, :has_moved
 
     def initialize(symbol, move_offsets, initial_position, color)
         @symbol = symbol
@@ -41,12 +41,12 @@ class Piece
         path = []
         x, y = x1 + dx, y1 + dy
         while [x, y] != target_position
-          path << [x, y]
-          x += dx
-          y += dy
+            path << [x, y]
+            x += dx
+            y += dy
         end
         path
-      end
+    end
 
     def generate_possible_moves(board)
         possible_moves = []
@@ -68,20 +68,27 @@ class Piece
 end
 
 class King < Piece
+    attr_accessor :in_check, :checkmated
+
     def initialize(color)
         symbol = color == 'white' ? '♔' : '♚'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        position = color == 'white' ? [0, 4] : [7, 3];
+        position = color == 'white' ? [0, 4] : [7, 4];
+        @in_check = false
+        @checkmated = false
         super(symbol, move_offsets, position, color)
     end
 
+    def can_castle?
+        !has_moved && !in_check;
+    end
 end
 
 class Queen < Piece
     def initialize(color)
         symbol = color == 'white' ? '♕' : '♛'
         relative_move_offsets =  [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
-        position = color == 'white' ? [0, 3] : [7, 4];
+        position = color == 'white' ? [0, 3] : [7, 3];
         super(symbol,  generate_move_offsets(relative_move_offsets), position, color)
     end
 end
@@ -115,7 +122,6 @@ class Bishop < Piece
 end
 
 class Pawn < Piece
-    attr_accessor :is_first_move
     def initialize(color, index)
         symbol = color == 'white' ? '♙' : '♟︎'
 
@@ -131,7 +137,6 @@ class Pawn < Piece
     end
 
     def first_move
-        @is_first_move = false
         move_offsets.delete_if { |offset| offset == [2, 0] || offset == [-2, 0] }
     end
 end
