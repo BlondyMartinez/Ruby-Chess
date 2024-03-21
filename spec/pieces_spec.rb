@@ -175,12 +175,16 @@ describe "Pieces" do
         piece_to_move = player1.pieces[0][0] 
         board.update_piece_pos(piece_to_move, [3,3])
         initial_position = piece_to_move.position
-        target_position = [4, 3]  
+        target_position = obstructing_piece_position
       
         expect(piece_to_move.valid_move?(target_position, board)).to be true
         if piece_to_move.valid_move?(target_position, board)
+            board.piece_at(target_position).got_captured(player2)
+            expect(board.piece_at(target_position).alive).to be false
+            expect(player2.pieces[0][1].alive).to be false
             board.update_piece_pos(piece_to_move, target_position) 
         end
+
 
         expect(piece_to_move.position).to eq(target_position)
         expect(board.slot_empty?(initial_position)).to be true
