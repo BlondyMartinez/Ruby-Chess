@@ -1,13 +1,14 @@
 require_relative 'board'
 
 class Piece
-    attr_reader :symbol, :move_offsets, :color
+    attr_reader :symbol, :move_offsets, :color, :initial_position
     attr_accessor :position, :alive
 
     def initialize(symbol, move_offsets, initial_position, color)
         @symbol = symbol
         @move_offsets = move_offsets
-        @position = initial_position
+        @initial_position = initial_position
+        @position = @initial_position
         @alive = true
         @color = color
     end
@@ -15,7 +16,7 @@ class Piece
     def valid_move?(target_position, board)
         target_piece = board.piece_at(target_position)
 
-        return false if !target_piece.nil? && target_piece.color == @color
+        return false if !target_piece.nil? && target_piece&.color == @color
 
         return false unless generate_possible_moves(board).include?(target_position)
         
@@ -36,16 +37,16 @@ class Piece
         x2, y2 = target_position
         dx = (x2 - x1).positive? ? 1 : (x2 - x1).negative? ? -1 : 0
         dy = (y2 - y1).positive? ? 1 : (y2 - y1).negative? ? -1 : 0
-    
+      
         path = []
         x, y = x1 + dx, y1 + dy
         while [x, y] != target_position
-            path << [x, y]
-            x += dx
-            y += dy
+          path << [x, y]
+          x += dx
+          y += dy
         end
         path
-    end
+      end
 
     def generate_possible_moves(board)
         possible_moves = []
@@ -53,10 +54,16 @@ class Piece
         @move_offsets.each do |offset|
             x = @position[0] + offset[0]
             y = @position[1] + offset[1]
-            possible_moves << [x, y] if x.between?(0, 7) && y.between?(0, 7) && board.slot_empty?([x, y])
+            possible_moves << [x, y] if x.between?(0, 7) && y.between?(0, 7)
         end
     
         possible_moves
+    end
+
+    def got_captured(player)
+        piece = player.pieces.flatten.find { |piece| piece.initial_position == @initial_position }
+        piece&.alive = false if piece
+        @alive = false
     end
 end
 
