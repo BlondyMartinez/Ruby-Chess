@@ -66,10 +66,10 @@ describe 'Board' do
         rook = board.piece_at([7, 7])
         king = board.piece_at([7, 4])
 
-        expect(king.can_castle?).to be true
+        expect(king.can_castle?(board)).to be true
         expect(rook.has_moved).to be false
 
-        board.castle(rook, king, 'short')
+        board.castle(rook, king, 'short', board)
         expect(rook.position).to eq([7, 5])
         expect(king.position).to eq([7, 6])
     end
