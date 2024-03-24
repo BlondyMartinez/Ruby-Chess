@@ -2,11 +2,12 @@ require_relative 'pieces'
 require_relative 'player'
 
 class Board
-    attr_reader :board
+    attr_reader :board, :pieces
 
     def initialize(pieces)
         @board = Array.new(8) { Array.new(8, ' ') }
         @letters = ('A'..'H').to_a
+        @pieces = pieces
         add_pieces(pieces)
     end
     
@@ -61,14 +62,18 @@ class Board
         nil
     end
 
-    def castle(rook, king, type) 
-        return nil if rook.has_moved || !king.can_castle? 
-        
+    def castle(rook, king, type, board) 
+        return nil if rook.has_moved || !king.can_castle?(board) 
+
         path_clear = rook.get_path_to(king.position).all? { |slot| slot_empty?(slot) }
         return nil if !path_clear
 
         k_offset = type == 'short' ? 2 : -2
-        update_piece_pos(king, [king.position[0], king.position[1] + k_offset])
+        king_new_pos = [king.position[0], king.position[1] + k_offset]
+
+        return nil if king.in_check?(board, king_new_pos)
+        
+        update_piece_pos(king, king_new_pos)
         
         r_offset = type == 'short' ? -2 : +3
         update_piece_pos(rook, [rook.position[0], rook.position[1] + r_offset])
