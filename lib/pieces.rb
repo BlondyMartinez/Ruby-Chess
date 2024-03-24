@@ -98,7 +98,7 @@ class King < Piece
     end
 
     def checkmated?(board)
-        possible_positions = king.generate_possible_moves(board)
+        possible_positions = generate_possible_moves(board).select { |slot| board.slot_empty?(slot) }
         possible_positions.all? { |pos| in_check?(board, pos)}
     end
 end
