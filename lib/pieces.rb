@@ -18,6 +18,10 @@ class Piece
         target_piece = board.piece_at(target_position)
 
         return false if !target_piece.nil? && target_piece&.color == @color
+        
+        if self.is_a?(Pawn)
+            return self.can_capture?(board, target_position) if self.is_trying_to_capture?(target_position)
+        end
 
         return false unless generate_possible_moves(board).include?(target_position)
         
@@ -141,13 +145,13 @@ class Bishop < Piece
 end
 
 class Pawn < Piece
+    attr_reader :capturing_offsets
+
     def initialize(color, index)
         symbol = color == 'white' ? '♙' : '♟︎'
 
-        white_moves = [[2, 0], [1, 0], [1, 1], [1, -1]]
-        black_moves = [[-2, 0], [-1, 0], [-1, 1], [-1, -1]]
-        move_offsets = color == 'white' ? white_moves : black_moves
-
+        move_offsets = color == 'white' ? [[2, 0], [1, 0]] : [[-2, 0], [-1, 0]]
+        @capturing_offsets = color == 'white' ? [[1, 1], [1, -1]] : [[-1, 1], [-1, -1]]
         position = color == 'white' ? [1, index] : [6, index];
 
         super(symbol, move_offsets, position, color)
@@ -156,6 +160,23 @@ class Pawn < Piece
     def first_move
         self.has_moved = true
         move_offsets.delete_if { |offset| offset == [2, 0] || offset == [-2, 0] }
+    end
+
+    def is_trying_to_capture?(target_position) 
+        if (@color == 'white')
+            x = target_position[0] + self.position[0]
+            y = target_position[1] + self.position[1]
+        else
+            x = target_position[0] - self.position[0] 
+            y = target_position[1] - self.position[1] 
+        end
+
+        capturing_offsets.any? { |offset| offset == [x, y] }
+    end
+
+    def can_capture?(board, target_position)
+        x, y = target_position
+        !board.slot_empty?(target_position) && board.board[x][y].color != self.color
     end
 end
 

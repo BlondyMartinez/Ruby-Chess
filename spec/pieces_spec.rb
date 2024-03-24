@@ -45,17 +45,18 @@ describe "Pieces" do
             board = Board.new(player1.pieces.concat(player2.pieces))
         
             pawn = player1.pieces.flatten.find { |piece| piece.is_a?(Pawn) }
-            board.update_piece_pos(pawn, [3, 0])
+            board.update_piece_pos(pawn, [2, 2])
 
             pawn_to_capture = player2.pieces.flatten.find { |piece| piece.is_a?(Pawn) }
-            target_position = [2, 1]
+            target_position = [1, 1]
 
+            expect(pawn.valid_move?(target_position, board)).to be true
             if pawn.valid_move?(target_position, board)
                 board.update_piece_pos(pawn, target_position)
             end
         
             expect(pawn.position).to eq(target_position)
-            expect(board.slot_empty?([3, 0])).to be true
+            expect(board.slot_empty?([2, 2])).to be true
         end
 
         it "does not allow pawn to perform initial double move if it has moved already" do 
