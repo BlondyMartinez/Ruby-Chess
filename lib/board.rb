@@ -63,8 +63,8 @@ class Board
 
     def castle(rook, king, type) 
         return nil if rook.has_moved || !king.can_castle? 
-
-        path_clear = rook.get_path_to(king).all? { |slot| slot_empty?(slot) }
+        
+        path_clear = rook.get_path_to(king.position).all? { |slot| slot_empty?(slot) }
         return nil if !path_clear
 
         k_offset = type == 'short' ? 2 : -2

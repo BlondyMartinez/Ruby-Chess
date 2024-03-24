@@ -60,5 +60,17 @@ describe 'Board' do
         player2 = Player.new('white')
 
         board = Board.new(player1.pieces.concat(player2.pieces))
+        board.board[7][5] = ' ' 
+        board.board[7][6] = ' '
+
+        rook = board.piece_at([7, 7])
+        king = board.piece_at([7, 4])
+
+        expect(king.can_castle?).to be true
+        expect(rook.has_moved).to be false
+
+        board.castle(rook, king, 'short')
+        expect(rook.position).to eq([7, 5])
+        expect(king.position).to eq([7, 6])
     end
 end
