@@ -69,19 +69,37 @@ class Piece
 end
 
 class King < Piece
-    attr_accessor :in_check, :checkmated
 
     def initialize(color)
         symbol = color == 'white' ? '♔' : '♚'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
         position = color == 'white' ? [0, 4] : [7, 4];
-        @in_check = false
-        @checkmated = false
         super(symbol, move_offsets, position, color)
     end
 
-    def can_castle?
-        !self.has_moved && !in_check;
+    def can_castle?(board)
+        !self.has_moved && !in_check?(board);
+    end
+
+    def in_check?(board, position = @position)
+        enemy_color = @color == 'white' ? 'black' : 'white'
+
+        board.pieces.each do |row|
+            row.each do |piece|
+                next if piece.nil? || piece.color == @color 
+
+                piece.generate_possible_moves(board).each do |move|
+                    return true if move == position
+                end
+            end
+        end
+
+        false 
+    end
+
+    def checkmated?(board)
+        possible_positions = king.generate_possible_moves(board)
+        possible_positions.all? { |pos| in_check?(board, pos)}
     end
 end
 
