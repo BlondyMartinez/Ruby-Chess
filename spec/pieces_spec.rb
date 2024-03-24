@@ -4,7 +4,7 @@ require_relative "../lib/board"
 # frozen_string_literal: true
 
 describe "Pieces" do 
-    describe "Piece movement" do
+    describe "#Piece movement" do
         it "allows pieces to move to an empty slot" do
             player1 = Player.new('black')
             player2 = Player.new('white')
@@ -188,5 +188,41 @@ describe "Pieces" do
 
         expect(piece_to_move.position).to eq(target_position)
         expect(board.slot_empty?(initial_position)).to be true
+    end
+
+    describe "#King" do 
+        it "checkmated" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
+
+            board.board[6][4] = ' '
+            board.update_piece_pos(board.piece_at([0, 3]), [3, 4])
+
+            expect(board.piece_at([7, 4]).checkmated?(board)).to be true
+        end
+
+        it "not in check" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
+
+            expect(board.piece_at([7, 4]).in_check?(board)).to be false
+        end
+        
+        
+        it "in check but not checkmated" do
+            player1 = Player.new('black')
+            player2 = Player.new('white')
+            board = Board.new(player1.pieces.concat(player2.pieces))
+
+            board.board[6][4] = ' '
+            board.board[6][5] = ' '
+
+            board.update_piece_pos(board.piece_at([0, 0]), [3, 4])
+
+            expect(board.piece_at([7, 4]).in_check?(board)).to be true
+            expect(board.piece_at([7, 4]).checkmated?(board)).to be false
+        end
     end
 end
