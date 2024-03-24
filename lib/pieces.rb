@@ -73,7 +73,6 @@ class Piece
 end
 
 class King < Piece
-
     def initialize(color)
         symbol = color == 'white' ? '♔' : '♚'
         move_offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]]
@@ -86,8 +85,6 @@ class King < Piece
     end
 
     def in_check?(board, position = @position)
-        enemy_color = @color == 'white' ? 'black' : 'white'
-
         board.pieces.each do |row|
             row.each do |piece|
                 next if piece.nil? || piece.color == @color 
